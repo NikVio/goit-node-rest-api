@@ -1,11 +1,50 @@
-// import contactsService from "../services/contactsServices.js";
+const contactsService = require("../services/contactsServices");
+const HttpError = require("../helpers/HttpError");
 
-// export const getAllContacts = (req, res) => {};
+const controllersWrapper = require("../helpers/controllersWrapper");
 
-// export const getOneContact = (req, res) => {};
+const getAllContacts = async (req, res) => {
+  const result = await contactsService.listContacts();
+  res.json(result);
+};
 
-// export const deleteContact = (req, res) => {};
+const getOneContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await contactsService.getContactById(id);
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.json(result);
+};
 
-// export const createContact = (req, res) => {};
+const deleteContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await contactsService.removeContact(id);
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.json(result);
+};
 
-// export const updateContact = (req, res) => {};
+const createContact = async (req, res) => {
+  const result = await contactsService.addContact(req.body);
+  res.status(201).json(result);
+};
+
+const updateContact = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, phone } = req.body;
+  const result = await contactsService.updateById({ id, name, email, phone });
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.json(result);
+};
+
+module.exports = {
+  getAllContacts: controllersWrapper(getAllContacts),
+  getOneContact: controllersWrapper(getOneContact),
+  deleteContact: controllersWrapper(deleteContact),
+  createContact: controllersWrapper(createContact),
+  updateContact: controllersWrapper(updateContact),
+};

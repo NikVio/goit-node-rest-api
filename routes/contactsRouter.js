@@ -6,12 +6,14 @@ const {
   deleteContact,
   createContact,
   updateContact,
+  updateStatusContact,
 } = require("../controllers/contactsControllers.js");
 
 const validateBody = require("../helpers/validateBody.js");
 const {
   createContactSchema,
   updateContactSchema,
+  updateFavorite,
 } = require("../schemas/contactsSchemas");
 
 const contactsRouter = express.Router();
@@ -25,5 +27,11 @@ contactsRouter.delete("/:id", deleteContact);
 contactsRouter.post("/", validateBody(createContactSchema), createContact);
 
 contactsRouter.put("/:id", validateBody(updateContactSchema), updateContact);
+
+contactsRouter.patch(
+  "/:id/favorite",
+  validateBody(updateFavorite),
+  updateStatusContact
+);
 
 module.exports = contactsRouter;

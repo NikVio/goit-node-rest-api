@@ -1,6 +1,6 @@
 const requestError = require("../helpers/HttpError");
 const jwt = require("jsonwebtoken");
-const User = require("../models/users");
+const User = require("../models/usersModel");
 
 const { JWT_SECRET } = process.env;
 
@@ -21,13 +21,7 @@ const authMiddleware = async (req, res, next) => {
     const user = await User.findById(id);
     req.user = user;
   } catch (error) {
-    if (
-      error.name === "TokenExpiredError" ||
-      error.name === "JsonWebTokenError"
-    ) {
-      next(requestError(401, "Not authorized"));
-    }
-    next(error);
+    next(requestError(401, "Not authorized"));
   }
   next();
 };

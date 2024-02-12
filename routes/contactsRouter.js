@@ -1,5 +1,4 @@
 const express = require("express");
-
 const {
   getAllContacts,
   getOneContact,
@@ -7,7 +6,7 @@ const {
   createContact,
   updateContact,
   updateStatusContact,
-} = require("../controllers/contactsControllers.js");
+} = require("../controllers/contactsControllers/index");
 
 const validateBody = require("../helpers/validateBody.js");
 const {

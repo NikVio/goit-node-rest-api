@@ -15,8 +15,10 @@ const registration = async (req, res, next) => {
     });
 
     res.status(201).json({
-      id: result._id,
-      email,
+      user: {
+        email,
+        subscription: result.subscription,
+      },
     });
   } catch (error) {
     if (error.code === 11000) {

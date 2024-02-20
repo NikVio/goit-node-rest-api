@@ -1,8 +1,6 @@
 const express = require("express");
-const mongoose = require("mongoose");
-require("dotenv").config();
 
-const { DB_HOST } = process.env;
+require("dotenv").config();
 
 const morgan = require("morgan");
 const cors = require("cors");
@@ -16,6 +14,7 @@ const app = express();
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 app.use("/api/contacts", contactsRouter);
 
@@ -30,15 +29,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-mongoose
-  .connect(DB_HOST)
-  .then(() => console.log("Database connection successful"))
-  .then(() =>
-    app.listen(3000, () => {
-      console.log("Server is running");
-    })
-  )
-  .catch((err) => {
-    console.error(err.message);
-    process.exit(1);
-  });
+module.exports = app;
